@@ -1,0 +1,1559 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+#root {
+  width: 100%;
+  max-width: none;
+}
+
+/* НОВИЙ МАКЕТ */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.sidebar {
+  width: 260px;
+  background-color: #1e293b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-brand h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #60a5fa !important;
+}
+
+.sidebar-brand p {
+  margin: 0 0 30px 0;
+  font-size: 13px;
+  color: #94a3b8 !important;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: auto;
+  /* Відштовхує статистику вниз */
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  line-height: 1;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 15px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: #94a3b8;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.nav-btn svg {
+  display: block;
+  flex-shrink: 0;
+  margin-bottom: 1px;
+}
+
+.nav-btn:hover {
+  background-color: rgba(96, 165, 250, 0.1);
+  color: #60a5fa;
+}
+
+.nav-btn.active {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.action-btn {
+  background-color: #8b5cf6;
+  color: white;
+  margin-top: 10px;
+}
+
+.action-btn:hover {
+  background-color: #7c3aed;
+}
+
+/* Статистика в Sidebar */
+.sidebar-stats {
+  background-color: #0f172a;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+/* Основна зона */
+.main-content-area {
+  flex: 1;
+  padding: 40px 50px;
+  width: 100%;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.btn-add-lesson-main {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+  transition: background-color 0.2s;
+}
+
+.btn-add-lesson-main:hover {
+  background-color: #2563eb;
+}
+
+/* Розклад */
+.schedule-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.day-title {
+  font-size: 20px;
+  color: #4b5563;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 5px;
+}
+
+.lessons-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.student-name {
+  font-size: 16px;
+  margin: 0;
+}
+
+.student-grade {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: normal;
+}
+
+.lesson-price {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.lesson-contacts {
+  background-color: #f9fafb;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.lesson-contacts p {
+  margin-bottom: 4px;
+}
+
+.lesson-contacts p:last-child {
+  margin-bottom: 0;
+}
+
+.messengers {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.format-banner.online {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-top: 1px solid #bfdbfe;
+  border-bottom: 1px solid #bfdbfe;
+}
+
+.format-banner.offline {
+  background-color: #fef3c7;
+  /* Світло-жовтий */
+  color: #92400e;
+  /* Коричневий текст */
+  border-top: 1px solid #fde68a;
+  border-bottom: 1px solid #fde68a;
+}
+
+.lesson-note {
+  font-size: 13px;
+  font-style: italic;
+  color: #4b5563;
+  background-color: #fefce8;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px dashed #fde047;
+}
+
+.lesson-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid #f3f4f6;
+  text-align: right;
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.badge-paid {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge-debt {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.empty-state {
+  text-align: center;
+  color: #6b7280;
+  font-size: 18px;
+  margin-top: 50px;
+}
+
+/* --- Стилі для форми та кнопок --- */
+
+.add-lesson-form {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  border-top: 5px solid #3b82f6;
+}
+
+.add-lesson-form h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #1f2937;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.btn-cancel,
+.btn-submit {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.btn-cancel:hover {
+  background-color: #e5e7eb;
+}
+
+.btn-submit {
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-submit:hover {
+  background-color: #059669;
+}
+
+/* --- СТИЛІ ДЛЯ МОДАЛЬНОГО ВІКНА --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /* Напівпрозорий темний фон */
+  backdrop-filter: blur(2px);
+  /* Легке розмиття заднього фону */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  color: #4b5563;
+  margin-bottom: 25px;
+  line-height: 1.5;
+  font-size: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* =========================================
+   🌙 ТЕМНА ТЕМА (DARK MODE)
+   ========================================= */
+.dark-theme {
+  background-color: #111827;
+  color: #f3f4f6;
+  min-height: 100vh;
+}
+
+/* Магія: Знаходимо всі білі картки і робимо їх темними */
+.dark-theme [style*="background-color: white"],
+.dark-theme [style*="background-color: rgb(255, 255, 255)"],
+.dark-theme [style*="background: white"],
+.dark-theme .schedule-day,
+.dark-theme .lesson-card,
+.dark-theme .add-lesson-form,
+.dark-theme .modal-content {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+  color: #f3f4f6 !important;
+}
+
+/* Світло-сірі фони (наприклад, поля приміток) робимо темно-сірими */
+.dark-theme [style*="background-color: #f9fafb"],
+.dark-theme [style*="background-color: #f3f4f6"] {
+  background-color: #374151 !important;
+}
+
+/* Робимо заголовки і текст світлими */
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3 {
+  color: #f3f4f6 !important;
+}
+
+.dark-theme p,
+.dark-theme label {
+  color: #d1d5db !important;
+}
+
+/* Стилізуємо поля вводу (інпути) під темну тему */
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+  background-color: #374151 !important;
+  color: #f3f4f6 !important;
+  border-color: #4b5563 !important;
+}
+
+/* =========================================
+   РОБИМО ЛІНІЇ ТА ПІДКРЕСЛЕННЯ ВИДИМИМИ У СВІТЛІЙ ТЕМІ
+   ========================================= */
+
+/* Головна лінія під заголовками (База учнів, Фінанси тощо) */
+.dashboard-layout:not(.dark-theme) .page-header {
+  border-bottom: 2px solid #cbd5e1 !important;
+  /* Робимо лінію більш насиченою сірою */
+}
+
+/* Дрібні розділові лінії (наприклад, між транзакціями або в картках) */
+.dashboard-layout:not(.dark-theme) [style*="border-bottom: 1px solid #f3f4f6"],
+.dashboard-layout:not(.dark-theme) [style*="border-top: 1px solid #f3f4f6"],
+.dashboard-layout:not(.dark-theme) [style*="border: 1px solid #e5e7eb"] {
+  border-color: #cbd5e1 !important;
+  /* Додаємо контрасту всім світло-сірим рамкам */
+}
+
+/* =========================================
+   ☀️ СВІТЛА ТЕМА (Захист від зникнення тексту)
+   ========================================= */
+/* Застосовуємо темний колір ТІЛЬКИ до головної світлої зони, не чіпаючи сайдбар */
+.dashboard-layout:not(.dark-theme) .main-content-area h1,
+.dashboard-layout:not(.dark-theme) .main-content-area h2,
+.dashboard-layout:not(.dark-theme) .main-content-area h3 {
+  color: #1f2937 !important;
+}
+
+.dashboard-layout:not(.dark-theme) .main-content-area label {
+  color: #4b5563 !important;
+}
+
+.dashboard-layout:not(.dark-theme) .empty-state {
+  color: #6b7280 !important;
+}
+
+/* =========================================
+   СТИЛІ ДЛЯ КАРТКИ УЧНЯ (Світла та Темна теми)
+   ========================================= */
+
+/* Блок нотаток */
+.student-notes-box {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.notes-title {
+  color: #4b5563;
+}
+
+.notes-text {
+  color: #1f2937;
+}
+
+/* Кнопки в картці */
+.btn-edit-student {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-delete-student {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* --- ПОВЕДІНКА В ТЕМНІЙ ТЕМІ --- */
+.dark-theme .student-notes-box {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.dark-theme .notes-title {
+  color: #9ca3af !important;
+}
+
+.dark-theme .notes-text {
+  color: #f3f4f6 !important;
+}
+
+.dark-theme .btn-edit-student {
+  background-color: #374151 !important;
+  color: #e2e8f0 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark-theme .btn-delete-student {
+  background-color: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+/* =========================================
+   НОВІ СТИЛІ РОЗКЛАДУ (Світла та Темна теми)
+   ========================================= */
+
+/* Сама картка */
+.lesson-card-modern {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.lesson-card-modern:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Кнопки редагування в шапці картки */
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.icon-btn.edit-btn:hover {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.icon-btn.delete-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* --- ПОВЕДІНКА В ТЕМНІЙ ТЕМІ --- */
+.dark-theme .lesson-card-modern {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.dark-theme .lc-header {
+  border-color: #374151 !important;
+}
+
+.dark-theme .day-header {
+  border-color: #374151 !important;
+  color: #f3f4f6 !important;
+}
+
+.dark-theme .lc-time {
+  color: #f3f4f6 !important;
+}
+
+.dark-theme .lc-title {
+  color: #f3f4f6 !important;
+}
+
+.dark-theme .lc-price {
+  color: #d1d5db !important;
+}
+
+.dark-theme .icon-btn.edit-btn:hover {
+  background: #374151;
+  color: #e2e8f0;
+}
+
+.dark-theme .icon-btn.delete-btn:hover {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+/* =========================================
+   СТИЛІ ДЛЯ DRAG & DROP
+   ========================================= */
+
+.empty-day-dropzone {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  color: #9ca3af;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+}
+
+.dark-theme .empty-day-dropzone {
+  border-color: #4b5563;
+  background-color: #1f2937;
+  color: #6b7280;
+}
+
+/* =========================================
+   СТИЛІ ДЛЯ DRAG & DROP ТА КНОПКИ "+"
+   ========================================= */
+
+/* Фікс мишки: тепер завжди показується звичайна "рука" (pointer) */
+.draggable-card {
+  cursor: pointer;
+}
+
+.draggable-card:active {
+  cursor: grabbing;
+}
+
+/* Кнопка "Додати" біля кожного дня */
+.btn-add-day-lesson {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-add-day-lesson:hover {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+/* Колір лінії та кнопки в темній темі */
+.dark-theme .day-header-container {
+  border-color: #374151 !important;
+}
+
+.dark-theme .btn-add-day-lesson {
+  background-color: #374151;
+  color: #d1d5db;
+  border-color: #4b5563;
+}
+
+.dark-theme .btn-add-day-lesson:hover {
+  background-color: #4b5563;
+  color: #f3f4f6;
+}
+
+/* =========================================
+   СТИЛІ ДЛЯ TO-DO WIDGET (ЗАДАЧІ)
+   ========================================= */
+.todo-item {
+  transition: all 0.2s ease;
+}
+
+.todo-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.todo-delete-btn {
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.todo-item:hover .todo-delete-btn {
+  opacity: 1;
+}
+
+/* Красивий тонкий скрол для списку задач */
+.todo-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.todo-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todo-list-container::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 10px;
+}
+
+.dark-theme .todo-list-container::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Вкладки в профілі учня */
+.student-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dark-theme .student-tabs {
+  border-color: #374151;
+}
+
+.tab-btn {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #9ca3af;
+  border-bottom: 2px solid transparent;
+  transition: 0.2s;
+}
+
+.tab-btn.active {
+  color: #8b5cf6;
+  border-bottom-color: #8b5cf6;
+}
+
+/* Список історії */
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px dashed #e5e7eb;
+  font-size: 14px;
+}
+
+.dark-theme .history-item {
+  border-color: #374151;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-date {
+  color: #6b7280;
+  font-family: monospace;
+}
+
+.dark-theme .history-date {
+  color: #9ca3af;
+}
+
+/* Нові стилі для карток статистики */
+.stat-card-new {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease;
+}
+
+.dark-theme .stat-card-new {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.stat-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.stat-icon-wrapper.blue {
+  background: #dbeafe;
+  color: #3b82f6;
+}
+
+.stat-icon-wrapper.green {
+  background: #d1fae5;
+  color: #10b981;
+}
+
+.stat-icon-wrapper.purple {
+  background: #ede9fe;
+  color: #8b5cf6;
+}
+
+.dark-theme .stat-icon-wrapper.blue {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.dark-theme .stat-icon-wrapper.green {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.dark-theme .stat-icon-wrapper.purple {
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.stat-info p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-info h3 {
+  margin: 4px 0 0 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.dark-theme .stat-info h3 {
+  color: #f3f4f6;
+}
+
+.btn-zoom-launch {
+  width: 100%;
+  padding: 12px;
+  background-color: #2D8CFF;
+  /* Колір Zoom */
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-zoom-launch:hover {
+  background-color: #1a73e8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(45, 140, 255, 0.4);
+}
+
+.zoom-widget-card:hover {
+  border-color: #2D8CFF !important;
+  transform: scale(1.02);
+}
+
+/* =========================================================
+   МОБІЛЬНА ВЕРСІЯ (DESKTOP-FIRST)
+   Ці стилі працюють ТІЛЬКИ на екранах менше 768px
+========================================================= */
+
+/* Приховуємо елементи мобільної навігації на комп'ютері */
+.mobile-header,
+.mobile-overlay,
+.mobile-close-btn {
+  display: none;
+}
+
+/* --- ПРИМУСОВИЙ РОЗМІР ЗАГОЛОВКІВ ДЛЯ ДЕСКТОПУ --- */
+@media (min-width: 769px) {
+
+  .page-header h1,
+  h1 {
+    font-size: 32px !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* 1. БАЗОВИЙ ЛЕЙАУТ ТА ШАПКА */
+  .dashboard-layout {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  .main-content-area {
+    margin-left: 0 !important;
+    padding: 15px !important;
+    width: 100% !important;
+  }
+
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--bg-card, #fff);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .dark-theme .mobile-header {
+    background-color: #1e293b;
+  }
+
+  .burger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* 2. БУРГЕР-МЕНЮ (САЙДБАР) ТА ЗАТЕМНЕННЯ ФОНУ */
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: -320px;
+    /* Сховано за лівим краєм екрана */
+    height: 100vh !important;
+    z-index: 1000;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar.mobile-open {
+    left: 0 !important;
+  }
+
+  /* Клас відкриття меню */
+
+  .mobile-close-btn {
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+  }
+
+  .mobile-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+  }
+
+  /* 3. ЗАГОЛОВКИ СТОРІНОК (Розмір та розташування) */
+  h1,
+  .page-header h1,
+  .materials-header h1,
+  .archive-header h1 {
+    font-size: 24px !important;
+    text-align: left !important;
+    white-space: normal !important;
+    margin-bottom: 5px !important;
+  }
+
+  .page-header,
+  .materials-header,
+  .archive-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 15px !important;
+  }
+
+  /* 4. КНОПКИ ТА ПОШУК (На всю ширину) */
+  .page-header button,
+  .materials-actions button {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 12px !important;
+    /* Збільшена зона для пальця */
+  }
+
+  .materials-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+    margin-top: 10px !important;
+  }
+
+  .archive-header input[type="text"] {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 5. РОЗКЛАД, ВІДЖЕТИ, СТАТИСТИКА (В одну колонку) */
+  .home-view>div[style*="display: grid"],
+  .students-grid,
+  div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .home-view>div[style*="display: flex"] {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+
+  .home-view div[style*="flex: 1 1 600px"],
+  .home-view div[style*="flex: 0 0 320px"] {
+    flex: none !important;
+    width: 100% !important;
+  }
+
+  /* 6. ФОРМИ (Додавання учня/уроку) */
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .form-container,
+  .modal-content,
+  form {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 15px !important;
+  }
+
+  /* 16px font-size блокує автоматичний зум на iPhone */
+  .form-container input,
+  .form-container select,
+  .form-container textarea {
+    width: 100% !important;
+    font-size: 16px !important;
+  }
+
+  .form-actions,
+  .modal-actions {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .form-actions button,
+  .modal-actions button {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* 7. ТАБЛИЦІ (Свайп вліво-вправо замість стискання) */
+  .table-wrapper,
+  .table-container,
+  .finance-table-container,
+  .archive-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1);
+  }
+
+  table {
+    min-width: 600px !important;
+  }
+}
+
+/* === КІНЕЦЬ МОБІЛЬНОЇ ВЕРСІЇ === */
+
+/* ==========================================================================
+   src/App.css
+   ГОЛОВНИЙ СТИЛЬОВИЙ ФАЙЛ (ПОВНЕ ПОКРАЩЕННЯ)
+   ========================================================================== */
+
+/* 1. ШРИФТ (MODERN & READABLE) */
+/* Використовуємо Inter або сучасну системну сімейство для чіткості */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Глобальні налаштування */
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* КОЛЬОРИ: СВІТЛА ТЕМА (PRIMARY) */
+  --primary-bg: #f8fafc;
+  /* Дуже світло-сірий фон сторінки */
+  --card-bg: #ffffff;
+  /* Чисто білий фон карток */
+  --sidebar-bg: #0f172a;
+  /* Глибокий синій для сайдбару (як і було) */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-subtle: #e2e8f0;
+
+  /* АКЦЕНТИ (ЖОВТИЙ ДЛЯ LIGHT THEME) */
+  --accent-sun: #f59e0b;
+  /* Той самий жовтий для теми */
+  --primary-purple: #8b5cf6;
+  --success-green: #10b981;
+  --danger-red: #ef4444;
+
+  /* ТІНІ (THE BIG REQUEST!) - М'які та глибокі */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 5px 10px -5px rgba(0, 0, 0, 0.04);
+
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* КОЛЬОРИ: ТЕМНА ТЕМА (OVERRIDES) */
+.dark-theme {
+  --primary-bg: #0f172a;
+  /* Фон сторінки */
+  --card-bg: #1e293b;
+  /* Фон карток */
+  --sidebar-bg: #0a1120;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border-subtle: #334155;
+
+  /* Тіні в темній темі мають бути тьмянішими */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   БАЗОВІ СКАНОВЛЕННЯ
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--primary-bg);
+  color: var(--text-main);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+.dashboard-layout h1 {
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+button {
+  font-family: var(--font-main);
+  transition: all 0.2s ease;
+}
+
+/* ==========================================================================
+   ГОЛОВНИЙ ЛЕЙАУТ (DASHBOARD)
+   ========================================================================== */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content-area {
+  flex: 1;
+  padding: 30px;
+  /* Більше простору по краях сторінки */
+  background-color: var(--primary-bg);
+  min-width: 0;
+}
+
+/* Анімація fadeIn для всі сторінок */
+.home-view,
+.finance-container,
+.archive-container,
+.materials-container {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   САЙДБАР (SIDEBAR) - ПОКРАЩЕННЯ
+   ========================================================================== */
+.sidebar {
+  width: 260px;
+  background-color: var(--sidebar-bg);
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  transition: width 0.3s ease;
+  color: #fff;
+  /* Текст в сайдбарі завжди білий */
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 15px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  /* Спокійний сірий (як і було) */
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #fff;
+}
+
+.nav-btn.active {
+  background-color: var(--primary-purple);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* ==========================================================================
+   КАРТКИ УРОКІВ (LESSONCARDS) & РОЗКЛАД (SCHEDULE)
+   ========================================================================== */
+
+/* ПОКРАЩЕНІ ВІДСТУПИ ДЛЯ ДНІВ ТИЖНЯ */
+.schedule-day-zone {
+  margin-bottom: 35px;
+  /* Більше повітря між Понеділком, Вівторком і т.д. */
+}
+
+.day-header-container {
+  margin-bottom: 20px;
+}
+
+/* САМА КАРТКА УРОКУ (the one you wanted fixed) */
+.lesson-card-modern {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md) !important;
+  /* ТІНЬ ДЛЯ DEPTH */
+  box-shadow: var(--shadow-md);
+  padding: 20px;
+  transition: all 0.3s ease !important;
+  border: 1px solid var(--border-subtle);
+  position: relative;
+  overflow: hidden;
+}
+
+.lesson-card-modern:hover {
+  /* ТІНЬ СТАЄ ГЛИБШОЮ НА ХОВЕР */
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+/* Спеціальний бордюр для активного уроку (зелений) */
+.lesson-card-modern.active-lesson-border {
+  border: 2px solid var(--success-green);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+/* Іконки всередині картки */
+.icon-btn.edit-btn,
+.icon-btn.delete-btn {
+  background-color: transparent !important;
+  color: var(--text-muted) !important;
+  opacity: 0.6;
+  border-radius: 6px !important;
+}
+
+.icon-btn.edit-btn:hover {
+  color: var(--primary-purple) !important;
+  opacity: 1;
+  background-color: rgba(139, 92, 246, 0.1) !important;
+}
+
+.icon-btn.delete-btn:hover {
+  color: var(--danger-red) !important;
+  opacity: 1;
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* ==========================================================================
+   КНОПКИ ТА ФОРМИ (BUTTONS & FORMS)
+   ========================================================================== */
+.btn-submit,
+.btn-zoom-launch {
+  font-weight: 600;
+  border-radius: 10px !important;
+  padding: 10px 20px !important;
+  box-shadow: 0 4px 10px rgba(139, 92, 246, 0.25);
+}
+
+.btn-submit:hover,
+.btn-zoom-launch:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(139, 92, 246, 0.35);
+}
+
+/* Стилі для інпутів (більше простору) */
+.add-lesson-form input,
+.add-lesson-form select,
+.add-lesson-form textarea {
+  padding: 12px 15px !important;
+  /* Трохи більші відступи всередині */
+  border-radius: 10px !important;
+  border: 1px solid var(--border-subtle) !important;
+  font-family: var(--font-main);
+}
+
+.form-group label {
+  font-weight: 600 !important;
+  color: var(--text-muted) !important;
+  font-size: 13px !important;
+  margin-bottom: 6px !important;
+  display: block;
+}
+
+/* ==========================================================================
+   БАЗА УЧНІВ (STUDENTLISTVIEW) - ПОКРАЩЕННЯ ВІДСТУПІВ
+   ========================================================================== */
+.student-tabs {
+  margin-bottom: 20px;
+}
+
+.history-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ==========================================================================
+   ТІНІ І КАРТКИ ДЛЯ ВСЬОГО ІНШОГО (СТАТИСТИКА, ФІНАНСИ)
+   ========================================================================== */
+.stat-card-new,
+.stat-card,
+.todo-widget-container,
+.finance-view-card,
+.zoom-widget-card,
+.formulas-section-card {
+  background-color: var(--card-bg) !important;
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-subtle) !important;
+
+  /* ТІНЬ ГЛОБАЛЬНА ДЛЯ ВСІХ КАРТОК */
+  box-shadow: var(--shadow-md) !important;
+
+  transition: box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.todo-widget-container,
+.stat-card-new,
+.zoom-widget-card {
+  padding: 25px !important;
+  /* Більше повітря всередині віджетів */
+}
+
+/* ТІНІ ДЛЯ ПОЛОСИ ПРОГРЕСУ ТА ІНШИХ СМУЖОК */
+.lesson-progress-bar-container {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Модальні вікна (теж тінь) */
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-subtle);
+  animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   МАГІЧНІ ТІНІ (ПРИМУСОВИЙ OVERRIDE ІНЛАЙН-СТИЛІВ)
+   ========================================================================== */
+
+/* Шукаємо всі картки за класами або навіть за їхнім заокругленням кутів! */
+.lesson-card-modern,
+.stat-card,
+.zoom-widget-card,
+div[style*="border-radius: 16px"],
+div[style*="border-radius: 12px"],
+div[style*="border-radius: 14px"] {
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.06) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* Анімація "паріння": коли наводиш мишкою, картка м'яко підіймається */
+.lesson-card-modern:hover,
+.folder-card-hover:hover,
+div[style*="cursor: pointer"]:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.15), 0 10px 10px -5px rgba(139, 92, 246, 0.05) !important;
+}
+
+/* Спеціальні глибокі тіні для ТЕМНОЇ ТЕМИ */
+.dark-theme .lesson-card-modern,
+.dark-theme .stat-card,
+.dark-theme .zoom-widget-card,
+.dark-theme div[style*="border-radius: 16px"],
+.dark-theme div[style*="border-radius: 12px"],
+.dark-theme div[style*="border-radius: 14px"] {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+:root {
+  /* Глобальні налаштування */
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* КОЛЬОРИ: СВІТЛА ТЕМА (ПОКРАЩЕНИЙ КОНТРАСТ) */
+  --primary-bg: #e2e8f0;
+  /* ЗРОБИЛИ ФОН ПОМІТНО СІРИМ (був майже білий) */
+  --card-bg: #ffffff;
+  /* Чисто білий фон карток */
+  --sidebar-bg: #0f172a;
+  /* Темний сайдбар */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-subtle: #cbd5e1;
+  /* Зробили рамки карток трохи виразнішими */
+
+  /* АКЦЕНТИ */
+  --accent-sun: #f59e0b;
+  --primary-purple: #8b5cf6;
+  --success-green: #10b981;
+  --danger-red: #ef4444;
+
+  /* ТІНІ (Зробили їх ледь темнішими для світлого фону) */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
