@@ -266,7 +266,19 @@ export default function Dashboard({ db }) {
         {activeForm === 'student' && <AddStudentForm students={students} initialData={editingStudent} onSave={handleSaveStudent} onCancel={() => setActiveForm('studentList')} />}
         {activeForm === 'lesson' && <AddLessonForm students={students} initialData={editingLesson} prefillDay={prefillDay} onSave={handleSaveLesson} onCancel={() => setActiveForm('none')} activeWorkspace={activeWorkspace} />}
         {activeForm === 'studentList' && <StudentListView students={students} archive={archive} transactions={transactions} onDelete={handleDeleteStudent} onEdit={(s) => { setEditingStudent(s); setActiveForm('student'); }} onAddNew={() => resetForms('student')} isDarkMode={isDarkMode} />}
-        {activeForm === 'finance' && <FinanceView students={students} transactions={transactions} isDarkMode={isDarkMode} onAddTransaction={(tx) => { setTransactions([...transactions, tx]); updateStudentBalance(tx.studentId, tx.amount); }} />}
+        {activeForm === 'finance' && (
+          <FinanceView 
+            students={students} 
+            transactions={transactions} 
+            isDarkMode={isDarkMode} 
+            onAddTransaction={(tx) => { setTransactions([...transactions, tx]); updateStudentBalance(tx.studentId, tx.amount); }}
+
+            schoolRate={schoolRate}
+            setSchoolRate={setSchoolRate}
+            schoolBalance={schoolBalance}
+            setSchoolBalance={setSchoolBalance}
+          />
+        )}
         {activeForm === 'archive' && <ArchiveView archive={archive} students={students} />}
         {activeForm === 'materials' && <MaterialsView materials={materials} setMaterials={setMaterials} folders={folders} setFolders={setFolders} isDarkMode={isDarkMode} />}
         {activeForm === 'analytics' && <AnalyticsView archive={archive} students={students} isDarkMode={isDarkMode} />}

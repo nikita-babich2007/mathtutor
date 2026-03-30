@@ -1,25 +1,24 @@
 import { useState, useEffect } from 'react';
-import { FiSave, FiX, FiBriefcase } from 'react-icons/fi';
+import { FiSave, FiX } from 'react-icons/fi';
 
 function AddLessonForm({ students, initialData, prefillDay, onSave, onCancel, activeWorkspace }) {
-  // Визначаємо, чи ми зараз створюємо/редагуємо шкільний блок
   const isSchoolMode = activeWorkspace === 'school' || initialData?.isSchool;
 
   const [formData, setFormData] = useState({
     studentId: students.length > 0 ? students[0].id : '',
-    subject: 'Інформатика', // ДОДАНО: Для школи (Предмет та клас)
+    subject: initialData?.subject || '', 
     dayOfWeek: prefillDay || 'Понеділок',
-    time: isSchoolMode ? '12:40' : '15:00',
-    duration: isSchoolMode ? 300 : 60, // 300 хвилин = 5 годин (твоя зміна)
-    isOnline: true,
-    isRegular: true
+    time: initialData?.time || (isSchoolMode ? '12:40' : '15:00'),
+    duration: initialData?.duration || (isSchoolMode ? 300 : 60), // Повернув 300 хв для зручності
+    isOnline: initialData?.isOnline !== undefined ? initialData.isOnline : true,
+    isRegular: initialData?.isRegular !== undefined ? initialData.isRegular : true
   });
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         studentId: initialData.student?.id || (students.length > 0 ? students[0].id : ''),
-        subject: initialData.subject || 'Інформатика',
+        subject: initialData.subject || '',
         dayOfWeek: initialData.dayOfWeek,
         time: initialData.time,
         duration: initialData.duration || (initialData.isSchool ? 300 : 60),
@@ -46,11 +45,11 @@ function AddLessonForm({ students, initialData, prefillDay, onSave, onCancel, ac
     let lessonData;
 
     if (isSchoolMode) {
-      // ЛОГІКА ЗБЕРЕЖЕННЯ ДЛЯ ШКОЛИ
       lessonData = {
         id: initialData ? initialData.id : Date.now(),
-        isSchool: true, // Вказуємо, що це шкільний блок
-        subject: formData.subject,
+        isSchool: true,
+        // Якщо нічого не ввів, буде просто "Шкільна зміна"
+        subject: formData.subject || 'Шкільна зміна', 
         dayOfWeek: formData.dayOfWeek,
         time: formData.time,
         duration: Number(formData.duration),
@@ -58,7 +57,6 @@ function AddLessonForm({ students, initialData, prefillDay, onSave, onCancel, ac
         isCompleted: initialData ? initialData.isCompleted : false
       };
     } else {
-      // ЛОГІКА ЗБЕРЕЖЕННЯ ДЛЯ РЕПЕТИТОРА
       if (!formData.studentId) {
         alert('Будь ласка, оберіть учня!');
         return;
@@ -89,11 +87,11 @@ function AddLessonForm({ students, initialData, prefillDay, onSave, onCancel, ac
       
       <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
         
-        {/* --- ПОЛЯ, ЩО ЗМІНЮЮТЬСЯ ЗАЛЕЖНО ВІД РЕЖИМУ --- */}
+        {/* АДЕКВАТНА НАЗВА ДЛЯ ШКОЛИ */}
         {isSchoolMode ? (
           <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-            <label>Предмет та Клас (або опис зміни)</label>
-            <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Напр. Інформатика (5-А) або Повна зміна" required />
+            <label>Опис зміни</label>
+            <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Напр. Зміна (Інформатика + Історія) або просто Робочий день" required />
           </div>
         ) : (
           <div className="form-group" style={{ gridColumn: '1 / -1' }}>
@@ -113,7 +111,6 @@ function AddLessonForm({ students, initialData, prefillDay, onSave, onCancel, ac
           </select>
         </div>
 
-        {/* --- СПІЛЬНІ ПОЛЯ --- */}
         <div className="form-group">
           <label>День тижня</label>
           <select name="dayOfWeek" value={formData.dayOfWeek} onChange={handleChange}>
@@ -131,10 +128,9 @@ function AddLessonForm({ students, initialData, prefillDay, onSave, onCancel, ac
         <div className="form-group" style={{ gridColumn: '1 / -1' }}>
           <label>Тривалість (у хвилинах)</label>
           {isSchoolMode ? (
-            // Для школи даємо можливість вписати будь-яку кількість хвилин
+            // Для школи можна ввести будь-яку кількість хвилин для всієї зміни
             <input type="number" name="duration" value={formData.duration} onChange={handleChange} step="5" min="15" required />
           ) : (
-            // Для репетитора залишаємо зручний випадаючий список
             <select name="duration" value={formData.duration} onChange={handleChange}>
               <option value="45">45 хвилин</option>
               <option value="60">60 хвилин (1 година)</option>

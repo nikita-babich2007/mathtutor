@@ -19,7 +19,8 @@ function Sidebar({
     const keysToBackup = [
       'tutor-students-base', 'tutor-schedule', 'tutor-transactions', 
       'tutor-archive', 'tutor-dark-mode', 'tutor-todos', 
-      'tutor-materials', 'tutor-folders'
+      'tutor-materials', 'tutor-folders', 'tutor-school-rate',
+      'tutor-school-balance'
     ];
     
     const backupData = {};

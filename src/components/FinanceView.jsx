@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { FiDollarSign, FiPlus, FiList, FiClock, FiSearch } from 'react-icons/fi';
+import { FiDollarSign, FiBriefcase, FiPlus, FiList, FiSearch } from 'react-icons/fi';
 
-function FinanceView({ students, transactions, onAddTransaction, isDarkMode }) {
+function FinanceView({ students, transactions, onAddTransaction, isDarkMode, schoolRate, setSchoolRate, schoolBalance, setSchoolBalance }) {
   const [formData, setFormData] = useState({
     studentId: students.length > 0 ? students[0].id : '',
     amount: '',
@@ -42,6 +42,77 @@ function FinanceView({ students, transactions, onAddTransaction, isDarkMode }) {
         </h1>
         <p style={{ color: '#9ca3af', margin: '5px 0 0 0' }}>Керування надходженнями від учнів</p>
       </div>
+
+      {/* ========================================================= */}
+      {/* БЛОК: ШКІЛЬНА ЗАРПЛАТА */}
+      {/* ========================================================= */}
+      <div className="finance-view-card" style={{ padding: '20px', marginBottom: '30px', display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center', borderLeft: '5px solid #3b82f6', backgroundColor: 'var(--card-bg)' }}>
+        <div style={{ flex: 1, minWidth: '200px' }}>
+          <h3 style={{ margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px', color: '#3b82f6' }}>
+            <FiBriefcase /> Шкільна Зарплата
+          </h3>
+          <p style={{ margin: 0, fontSize: '13px', color: isDarkMode ? '#94a3b8' : '#64748b', lineHeight: '1.5' }}>
+            Накопичується за відпрацьовані зміни. <br/>
+            Коли школа перерахує гроші в кінці місяця, натисни кнопку, щоб <b>перенести цю суму в загальний дохід</b> та почати новий місяць.
+          </p>
+        </div>
+        
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+            <label style={{ fontSize: '12px', fontWeight: 'bold', color: isDarkMode ? '#cbd5e1' : '#475569' }}>Ставка (₴/год)</label>
+            <input 
+              type="number" 
+              value={schoolRate} 
+              onChange={(e) => setSchoolRate(Number(e.target.value))}
+              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', width: '100px', backgroundColor: 'var(--primary-bg)', color: 'var(--text-main)', fontWeight: 'bold' }}
+            />
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+            <label style={{ fontSize: '12px', fontWeight: 'bold', color: isDarkMode ? '#cbd5e1' : '#475569' }}>Накопичено</label>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#10b981', padding: '6px 0' }}>
+              {schoolBalance.toFixed(0)} ₴
+            </div>
+          </div>
+
+          <button 
+            onClick={() => {
+              if(schoolBalance === 0) return alert('Баланс порожній! Спочатку відпрацюй шкільні зміни.');
+              if(window.confirm(`Школа виплатила зарплату?\n\nСума ${schoolBalance.toFixed(0)} ₴ буде додана до твоєї загальної статистики, а лічильник обнулиться.`)) {
+                
+                // 1. Створюємо системну транзакцію, щоб гроші пішли в Аналітику
+                const schoolTx = {
+                  id: Date.now(),
+                  studentId: 'school_salary',
+                  studentName: '🏫 Шкільна Зарплата',
+                  amount: schoolBalance,
+                  date: new Date().toISOString().split('T')[0],
+                  type: 'income'
+                };
+                
+                // Зберігаємо транзакцію
+                onAddTransaction(schoolTx);
+                
+                // 2. Обнуляємо лічильник для нового місяця
+                setSchoolBalance(0);
+              }
+            }}
+            style={{ 
+              padding: '10px 20px', borderRadius: '8px', border: '1px solid #3b82f6', 
+              backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : '#eff6ff', 
+              color: '#3b82f6', fontWeight: 'bold', cursor: 'pointer', alignSelf: 'flex-end', height: 'fit-content',
+              transition: '0.2s'
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#3b82f6'}
+            onMouseOut={(e) => e.target.style.backgroundColor = isDarkMode ? 'rgba(59, 130, 246, 0.1)' : '#eff6ff'}
+            onMouseEnter={(e) => e.target.style.color = 'white'}
+            onMouseLeave={(e) => e.target.style.color = '#3b82f6'}
+          >
+            ✅ ЗП зараховано
+          </button>
+        </div>
+      </div>
+      {/* ========================================================= */}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '30px' }}>
         
