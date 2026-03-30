@@ -44,15 +44,36 @@ export default function Dashboard({ db }) {
   const closeConfirm = () => setConfirmDialog({ isOpen: false, message: '', onConfirm: null });
 
   const handleSaveStudent = (studentData) => {
-    if (editingStudent) setStudents(students.map(s => s.id === studentData.id ? studentData : s));
-    else setStudents([...students, studentData]);
+    if (editingStudent) {
+      // 1. Оновлюємо самого учня в базі
+      setStudents(students.map(s => s.id === studentData.id ? studentData : s));
+      
+      // 2. СИНХРОНІЗАЦІЯ: Пробігаємось по всьому розкладу і оновлюємо дані цього учня
+      setLessons(lessons.map(lesson => {
+        if (lesson.student && lesson.student.id === studentData.id) {
+          // Якщо це урок цього учня, підміняємо його старі дані на нові (ім'я, ціна, клас)
+          return { ...lesson, student: studentData };
+        }
+        return lesson;
+      }));
+      
+      toast.success('✏️ Дані учня та його уроки оновлено!');
+    } else {
+      setStudents([...students, studentData]);
+      toast.success('✅ Новий учень доданий!');
+    }
     setActiveForm('studentList');
     setEditingStudent(null);
   };
 
   const handleDeleteStudent = (id) => {
-    requestConfirm('Видалити учня та всю його історію?', () => {
+    requestConfirm('Видалити учня та всі його уроки з розкладу?', () => {
+      // 1. Видаляємо самого учня
       setStudents(students.filter(s => s.id !== id));
+      
+      // 2. Видаляємо ВСІ уроки цього учня з розкладу
+      setLessons(lessons.filter(l => l.student?.id !== id));
+      
       toast.error('🗑️ Учня видалено');
     });
   };

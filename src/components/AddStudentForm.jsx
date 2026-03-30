@@ -12,7 +12,8 @@ function AddStudentForm({ initialData, onSave, onCancel }) {
     notes: '',
     paymentType: 'per_lesson',
     format: 'online',
-    lessonsPerWeek: '2' // НОВОЕ ПОЛЕ: По умолчанию 2 раза в неделю
+    lessonsPerWeek: '2',
+    balance: 0 // ДОДАНО: Стан для балансу
   });
 
   useEffect(() => {
@@ -27,7 +28,8 @@ function AddStudentForm({ initialData, onSave, onCancel }) {
         notes: initialData.notes || '',
         paymentType: initialData.paymentType || 'per_lesson',
         format: initialData.format || 'online',
-        lessonsPerWeek: initialData.lessonsPerWeek || '2' // Подтягиваем старое
+        lessonsPerWeek: initialData.lessonsPerWeek || '2',
+        balance: initialData.balance || 0 // ДОДАНО: Підтягуємо існуючий баланс
       });
     }
   }, [initialData]);
@@ -46,13 +48,14 @@ function AddStudentForm({ initialData, onSave, onCancel }) {
       price: Number(formData.defaultPrice),
       paymentType: formData.paymentType,
       format: formData.format, 
-      lessonsPerWeek: Number(formData.lessonsPerWeek), // Сохраняем как число
+      lessonsPerWeek: Number(formData.lessonsPerWeek),
       contacts: {
         phone: formData.phone,
         messengers: [formData.messengers],
         parentPhone: formData.parentPhone
       },
-      notes: formData.notes
+      notes: formData.notes,
+      balance: Number(formData.balance) // ДОДАНО: Оновлюємо баланс при збереженні
     } : {
       id: Date.now(),
       name: formData.name,
@@ -60,36 +63,59 @@ function AddStudentForm({ initialData, onSave, onCancel }) {
       price: Number(formData.defaultPrice),
       paymentType: formData.paymentType,
       format: formData.format, 
-      lessonsPerWeek: Number(formData.lessonsPerWeek), // Сохраняем как число
+      lessonsPerWeek: Number(formData.lessonsPerWeek),
       contacts: {
         phone: formData.phone,
         messengers: [formData.messengers],
         parentPhone: formData.parentPhone
       },
       notes: formData.notes,
-      balance: 0 
+      balance: Number(formData.balance) || 0 // ДОДАНО: Зберігаємо початковий баланс
     };
 
     onSave(studentData);
   };
 
   return (
-    <form className="add-lesson-form" style={{ borderTopColor: '#8b5cf6' }} onSubmit={handleSubmit}>
-      <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <form className="add-lesson-form" style={{ backgroundColor: 'var(--card-bg)', padding: '25px', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }} onSubmit={handleSubmit}>
+      <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
         {initialData ? '✏️ Редагувати дані учня' : '👤 Додати нового учня'}
       </h2>
-      <div className="form-grid">
-        <div className="form-group">
+      
+      <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+        
+        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
           <label>Ім'я учня</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />
         </div>
+        
         <div className="form-group">
           <label>Клас</label>
           <input type="number" name="grade" value={formData.grade} onChange={handleChange} required />
         </div>
+        
         <div className="form-group">
           <label>Ціна за урок (грн)</label>
           <input type="number" name="defaultPrice" value={formData.defaultPrice} onChange={handleChange} required />
+        </div>
+
+        {/* НОВИЙ БЛОК: РУЧНЕ КЕРУВАННЯ БАЛАНСОМ */}
+        <div className="form-group" style={{ gridColumn: '1 / -1', backgroundColor: 'var(--primary-bg)', padding: '15px', borderRadius: '10px', border: '1px solid var(--border-subtle)' }}>
+          <label style={{ display: 'flex', justifyContent: 'space-between', color: formData.balance < 0 ? 'var(--danger-red)' : (formData.balance > 0 ? 'var(--success-green)' : 'inherit') }}>
+            <span>Поточний баланс (₴)</span>
+            <span style={{ fontSize: '11px', fontWeight: 'normal', opacity: 0.6 }}>Можна редагувати вручну</span>
+          </label>
+          <input 
+            type="number" 
+            name="balance" 
+            value={formData.balance} 
+            onChange={handleChange} 
+            style={{ 
+              borderColor: formData.balance < 0 ? '#fca5a5' : 'var(--border-subtle)',
+              fontWeight: 'bold',
+              color: formData.balance < 0 ? 'var(--danger-red)' : (formData.balance > 0 ? 'var(--success-green)' : 'inherit')
+            }} 
+          />
         </div>
         
         <div className="form-group">
@@ -101,7 +127,6 @@ function AddStudentForm({ initialData, onSave, onCancel }) {
           </select>
         </div>
 
-        {/* НОВОЕ ПОЛЕ: Частота занятий */}
         <div className="form-group">
           <label>Занять на тиждень</label>
           <select name="lessonsPerWeek" value={formData.lessonsPerWeek} onChange={handleChange}>
@@ -113,7 +138,7 @@ function AddStudentForm({ initialData, onSave, onCancel }) {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
           <label>Як платить учень?</label>
           <select name="paymentType" value={formData.paymentType} onChange={handleChange}>
             <option value="per_lesson">За урок (поштучно)</option>
@@ -132,7 +157,7 @@ function AddStudentForm({ initialData, onSave, onCancel }) {
           <input type="tel" name="parentPhone" value={formData.parentPhone} onChange={handleChange} />
         </div>
 
-        <div className="form-group">
+        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
           <label>Месенджер</label>
           <select name="messengers" value={formData.messengers} onChange={handleChange}>
             <option value="telegram">Telegram</option>
@@ -141,18 +166,18 @@ function AddStudentForm({ initialData, onSave, onCancel }) {
           </select>
         </div>
 
-        <div className="form-group full-width">
+        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
           <label>Примітки (характер, теми, особливості)</label>
           <textarea name="notes" value={formData.notes} onChange={handleChange} rows="3"></textarea>
         </div>
       </div>
       
-      <div className="form-actions" style={{ marginTop: '20px' }}>
-        <button type="button" className="btn-cancel" onClick={onCancel} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <FiX /> Скасувати
-        </button>
-        <button type="submit" className="btn-submit" style={{ backgroundColor: '#8b5cf6', display: 'flex', alignItems: 'center', gap: '5px' }}>
+      <div className="form-actions" style={{ marginTop: '25px', display: 'flex', gap: '15px' }}>
+        <button type="submit" className="btn-submit" style={{ flex: 1, backgroundColor: 'var(--primary-purple)', color: 'white' }}>
           <FiSave /> {initialData ? 'Зберегти зміни' : 'Зберегти учня'}
+        </button>
+        <button type="button" className="btn-cancel" onClick={onCancel} style={{ flex: 1 }}>
+          <FiX /> Скасувати
         </button>
       </div>
     </form>
