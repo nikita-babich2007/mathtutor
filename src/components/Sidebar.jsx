@@ -66,7 +66,6 @@ function Sidebar({
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '22px', color: '#60a5fa' }}>
           <FiBookOpen size={26} /> MathTutor
         </h2>
-        {/* ОНОВЛЕНО: Тьмяний, ледь помітний WORKSPACE */}
         <p style={{ 
           margin: '2px 0 0 38px', 
           fontSize: '9px', 
@@ -104,7 +103,6 @@ function Sidebar({
           <FiPieChart size={18} /> Аналітика
         </button>
 
-        {/* ОНОВЛЕНО: Блок налаштувань. Текст сірий, іконки кольорові */}
         <div style={{ marginTop: 'auto', borderTop: `1px solid ${isDarkMode ? '#334155' : '#e2e8f0'}`, paddingTop: '15px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <button onClick={toggleTheme} className="nav-btn theme-toggle" style={{ color: isDarkMode ? '#94a3b8' : '#64748b' }}>
             {isDarkMode ? <><FiSun size={18} color="#fbbf24" /> Світла тема</> : <><FiMoon size={18} color="#6366f1" /> Темна тема</>}
@@ -127,7 +125,6 @@ function Sidebar({
           />
         </div>
       </nav>
-      {/* Нижні цифри повністю видалено */}
     </aside>
   );
 }

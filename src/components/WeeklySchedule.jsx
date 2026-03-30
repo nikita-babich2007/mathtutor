@@ -28,7 +28,9 @@ const getLessonLiveStatus = (lessonTime, duration, lessonDay) => {
   return { type: nowTotal >= endTotal ? 'finished' : 'upcoming' };
 };
 
-function WeeklySchedule({ lessons, onTogglePayment, onToggleCompleted, onDeleteLesson, onEditLesson, onMoveLesson, onAddLessonForDay, isDarkMode }) {
+function WeeklySchedule({ lessons, isDarkMode, onTogglePayment, onToggleCompleted, 
+  onDeleteLesson, onEditLesson, onMoveLesson, onAddLessonForDay,
+  onCompleteSchool }) {
   const days = ['Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Субота', 'Неділя'];
   
   // ВИЗНАЧАЄМО СЬОГОДНІШНІЙ ДЕНЬ
@@ -127,6 +129,7 @@ function WeeklySchedule({ lessons, onTogglePayment, onToggleCompleted, onDeleteL
                     liveStatus={getLessonLiveStatus(lesson.time, lesson.duration, day)}
                     onTogglePayment={onTogglePayment} 
                     onToggleCompleted={onToggleCompleted} 
+                    onCompleteSchool={onCompleteSchool}
                     onDeleteLesson={onDeleteLesson} 
                     onEditLesson={onEditLesson} 
                     isDarkMode={isDarkMode}
