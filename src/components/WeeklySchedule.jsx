@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import LessonCard from './LessonCard';
 import { FiCalendar, FiInbox, FiPlus } from 'react-icons/fi';
 
-// Функція для розрахунку "живого" статусу (залишаємо без змін)
+// Функція для розрахунку "живого" статусу
 const getLessonLiveStatus = (lessonTime, duration, lessonDay) => {
   const days = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Субота'];
   const now = new Date();
@@ -28,13 +28,16 @@ const getLessonLiveStatus = (lessonTime, duration, lessonDay) => {
   return { type: nowTotal >= endTotal ? 'finished' : 'upcoming' };
 };
 
-function WeeklySchedule({ lessons, isDarkMode, onTogglePayment, onToggleCompleted, 
+function WeeklySchedule({ 
+  lessons, isDarkMode, onTogglePayment, onToggleCompleted, 
   onDeleteLesson, onEditLesson, onMoveLesson, onAddLessonForDay,
-  onCompleteSchool }) {
+  onCompleteSchool, 
+  activeWorkspace, showAddMenu, onOpenAdd // НОВІ ПРОПСИ
+}) {
   const days = ['Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Субота', 'Неділя'];
   
   // ВИЗНАЧАЄМО СЬОГОДНІШНІЙ ДЕНЬ
-  const jsDay = new Date().getDay(); // 0 - неділя, 1 - понеділок...
+  const jsDay = new Date().getDay(); 
   const todayName = jsDay === 0 ? 'Неділя' : days[jsDay - 1];
 
   const [draggedOverDay, setDraggedOverDay] = useState(null);
@@ -62,7 +65,7 @@ function WeeklySchedule({ lessons, isDarkMode, onTogglePayment, onToggleComplete
       {days.map(day => {
         const dayLessons = groupedLessons[day];
         const isDraggingOver = draggedOverDay === day;
-        const isToday = day === todayName; // Перевірка чи цей день є сьогоднішнім
+        const isToday = day === todayName; 
 
         return (
           <div 
@@ -73,7 +76,6 @@ function WeeklySchedule({ lessons, isDarkMode, onTogglePayment, onToggleComplete
             onDrop={(e) => handleDrop(e, day)}
             style={{ 
               marginBottom: '30px',
-              // Якщо день сьогоднішній, додамо йому дуже легку підсвітку фону
               backgroundColor: isToday ? (isDarkMode ? 'rgba(59, 130, 246, 0.05)' : 'rgba(59, 130, 246, 0.02)') : 'transparent',
               borderRadius: '12px',
               padding: '10px'
@@ -88,36 +90,40 @@ function WeeklySchedule({ lessons, isDarkMode, onTogglePayment, onToggleComplete
               marginBottom: '15px' 
             }}>
               <h2 style={{ 
-                fontSize: '18px', 
-                margin: 0, 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '10px', 
+                fontSize: '18px', margin: 0, display: 'flex', alignItems: 'center', gap: '10px', 
                 color: isToday ? '#3b82f6' : (isDarkMode ? '#f3f4f6' : '#1f2937') 
               }}>
                 <FiCalendar style={{ color: isToday ? '#3b82f6' : '#8b5cf6' }} /> 
                 {day}
                 
-                {/* ПОВЕРНУЛИ БЕЙДЖ "СЬОГОДНІ" */}
                 {isToday && (
                   <span style={{ 
-                    fontSize: '11px', 
-                    backgroundColor: '#3b82f6', 
-                    color: 'white', 
-                    padding: '3px 10px', 
-                    borderRadius: '20px', 
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
+                    fontSize: '11px', backgroundColor: '#3b82f6', color: 'white', 
+                    padding: '3px 10px', borderRadius: '20px', fontWeight: 'bold',
+                    textTransform: 'uppercase', letterSpacing: '0.5px'
                   }}>
                     Сьогодні
                   </span>
                 )}
               </h2>
               
-              <button onClick={() => onAddLessonForDay(day)} className="btn-add-day-lesson">
-                <FiPlus /> Додати
-              </button>
+              {/* НОВИЙ БЛОК З КНОПКОЮ ДОДАТИ І МЕНЮ */}
+              <div style={{ position: 'relative' }}>
+                <button onClick={() => onAddLessonForDay(day)} className="btn-add-day-lesson" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <FiPlus /> Додати
+                </button>
+                
+                {showAddMenu === day && activeWorkspace === 'all' && (
+                  <div style={{ position: 'absolute', top: '110%', right: 0, backgroundColor: isDarkMode ? '#1f2937' : 'white', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: 50, width: '180px', border: `1px solid ${isDarkMode ? '#374151' : '#e2e8f0'}`, overflow: 'hidden' }}>
+                    <button onClick={() => onOpenAdd('tutor', day)} style={{ width: '100%', padding: '10px 15px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      🎓 Урок
+                    </button>
+                    <button onClick={() => onOpenAdd('school', day)} style={{ width: '100%', padding: '10px 15px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', borderTop: `1px solid ${isDarkMode ? '#374151' : '#e2e8f0'}` }}>
+                      🏫 Школа
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
             
             {dayLessons.length > 0 ? (

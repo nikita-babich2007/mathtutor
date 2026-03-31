@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { FiDollarSign, FiBriefcase, FiPlus, FiList, FiSearch } from 'react-icons/fi';
+import { toast } from 'react-toastify'; 
+import { FiDollarSign, FiBriefcase, FiPlus, FiList, FiSearch, FiClock, FiEdit2, FiCheck } from 'react-icons/fi';
 
-function FinanceView({ students, transactions, onAddTransaction, isDarkMode, schoolRate, setSchoolRate, schoolBalance, setSchoolBalance }) {
+function FinanceView({ students, transactions, onAddTransaction, isDarkMode, schoolRate, setSchoolRate, schoolBalance, setSchoolBalance, requestConfirm }) {
   const [formData, setFormData] = useState({
     studentId: students.length > 0 ? students[0].id : '',
     amount: '',
@@ -9,8 +10,10 @@ function FinanceView({ students, transactions, onAddTransaction, isDarkMode, sch
     comment: ''
   });
 
-  // ДОДАНО: Стан для пошуку
   const [searchTerm, setSearchTerm] = useState('');
+  
+  const [isEditingRate, setIsEditingRate] = useState(false);
+  const [tempRate, setTempRate] = useState(schoolRate);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,9 +30,9 @@ function FinanceView({ students, transactions, onAddTransaction, isDarkMode, sch
 
     onAddTransaction(newTx);
     setFormData({ ...formData, amount: '', comment: '' });
+    toast.success('Оплату успішно внесено!');
   };
 
-  // ДОДАНО: Фільтрація транзакцій за ім'ям учня
   const filteredTransactions = transactions.filter(tx =>
     tx.studentName && tx.studentName.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -57,15 +60,55 @@ function FinanceView({ students, transactions, onAddTransaction, isDarkMode, sch
           </p>
         </div>
         
-        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '25px', alignItems: 'center', flexWrap: 'wrap' }}>
+          
+          {/* КРАСИВЕ РЕДАГУВАННЯ СТАВКИ */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <label style={{ fontSize: '12px', fontWeight: 'bold', color: isDarkMode ? '#cbd5e1' : '#475569' }}>Ставка (₴/год)</label>
-            <input 
-              type="number" 
-              value={schoolRate} 
-              onChange={(e) => setSchoolRate(Number(e.target.value))}
-              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', width: '100px', backgroundColor: 'var(--primary-bg)', color: 'var(--text-main)', fontWeight: 'bold' }}
-            />
+            
+            {isEditingRate ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 0' }}>
+                <input 
+                  type="number" 
+                  value={tempRate} 
+                  onChange={(e) => setTempRate(e.target.value)}
+                  autoFocus
+                  style={{ width: '70px', padding: '6px 10px', borderRadius: '6px', border: `1px solid ${isDarkMode ? '#4b5563' : '#d1d5db'}`, background: isDarkMode ? '#374151' : '#fff', color: isDarkMode ? '#fff' : '#000', outline: 'none' }}
+                />
+                <button 
+                  onClick={() => {
+                    const newRate = Number(tempRate);
+                    if (!isNaN(newRate) && newRate > 0) {
+                      // ПЕРЕВІРКА: Якщо сума дійсно змінилася, зберігаємо і показуємо тост
+                      if (newRate !== schoolRate) {
+                        setSchoolRate(newRate);
+                        toast.success('Ставку оновлено!');
+                      }
+                      // В будь-якому випадку закриваємо поле вводу
+                      setIsEditingRate(false);
+                    } else {
+                      toast.error('Введіть коректну суму');
+                    }
+                  }}
+                  style={{ background: '#10b981', color: 'white', border: 'none', borderRadius: '6px', padding: '6px', cursor: 'pointer', display: 'flex' }}
+                >
+                  <FiCheck size={16} />
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: 'bold', color: 'var(--text-main)', padding: '5px 0' }}>
+                {schoolRate} ₴
+                <button 
+                  onClick={() => { setTempRate(schoolRate); setIsEditingRate(true); }}
+                  style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '4px', transition: '0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#3b82f6'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#9ca3af'}
+                  title="Змінити ставку"
+                >
+                  <FiEdit2 size={16} />
+                </button>
+              </div>
+            )}
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -77,10 +120,11 @@ function FinanceView({ students, transactions, onAddTransaction, isDarkMode, sch
 
           <button 
             onClick={() => {
-              if(schoolBalance === 0) return alert('Баланс порожній! Спочатку відпрацюй шкільні зміни.');
-              if(window.confirm(`Школа виплатила зарплату?\n\nСума ${schoolBalance.toFixed(0)} ₴ буде додана до твоєї загальної статистики, а лічильник обнулиться.`)) {
-                
-                // 1. Створюємо системну транзакцію, щоб гроші пішли в Аналітику
+              if(schoolBalance === 0) {
+                toast.warning('⚠️ Баланс порожній! Спочатку відпрацюй шкільні зміни.');
+                return;
+              }
+              requestConfirm(`Школа виплатила зарплату? Сума ${schoolBalance.toFixed(0)} ₴ буде додана до твоєї загальної статистики, а лічильник обнулиться.`, () => {
                 const schoolTx = {
                   id: Date.now(),
                   studentId: 'school_salary',
@@ -90,12 +134,10 @@ function FinanceView({ students, transactions, onAddTransaction, isDarkMode, sch
                   type: 'income'
                 };
                 
-                // Зберігаємо транзакцію
                 onAddTransaction(schoolTx);
-                
-                // 2. Обнуляємо лічильник для нового місяця
                 setSchoolBalance(0);
-              }
+                toast.success('🎉 Шкільну зарплату успішно зараховано!');
+              });
             }}
             style={{ 
               padding: '10px 20px', borderRadius: '8px', border: '1px solid #3b82f6', 
@@ -103,10 +145,8 @@ function FinanceView({ students, transactions, onAddTransaction, isDarkMode, sch
               color: '#3b82f6', fontWeight: 'bold', cursor: 'pointer', alignSelf: 'flex-end', height: 'fit-content',
               transition: '0.2s'
             }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#3b82f6'}
-            onMouseOut={(e) => e.target.style.backgroundColor = isDarkMode ? 'rgba(59, 130, 246, 0.1)' : '#eff6ff'}
-            onMouseEnter={(e) => e.target.style.color = 'white'}
-            onMouseLeave={(e) => e.target.style.color = '#3b82f6'}
+            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#3b82f6'; e.currentTarget.style.color = 'white'; }}
+            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = isDarkMode ? 'rgba(59, 130, 246, 0.1)' : '#eff6ff'; e.currentTarget.style.color = '#3b82f6'; }}
           >
             ✅ ЗП зараховано
           </button>
@@ -169,7 +209,6 @@ function FinanceView({ students, transactions, onAddTransaction, isDarkMode, sch
               <FiList color="#3b82f6" /> Останні надходження
             </h3>
             
-            {/* ДОДАНО: Поле пошуку */}
             <div style={{ position: 'relative' }}>
               <FiSearch style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
               <input 
